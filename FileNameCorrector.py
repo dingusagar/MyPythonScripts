@@ -12,6 +12,10 @@ def retriveName(tag,index):
     if nameWithVideId.startswith('.'):
         nameWithVideId = nameWithVideId[1:]
 
+    # Replace / with _
+    nameWithVideId = nameWithVideId.replace("/","_")
+
+
     orginalName = nameWithVideId + extension
     newName = str(index) + specialChar + nameWithVideId + extension
     return orginalName,newName
@@ -56,8 +60,8 @@ def find(name, path):
 # url is the youtube playlist page where you can find the video titles along with their numbers
 
 
-url = "file:///media/dingu/D_Box/SEM%205/os/Ravindrababu/Operating%20Systems%20-%20YouTube.html"
-dir = "/media/dingu/D_Box/SEM 5/os/Ravindrababu/"
+url = "file:///media/dingu/D_Box/latest%20tutorials/machine%20learning%20with%20python/Machine%20Learning%20with%20Python%20-%20YouTube.html"
+dir = "/media/dingu/D_Box/latest tutorials/machine learning with python/"
 
 if not dir.endswith('/'):
     dir = dir + '/'
