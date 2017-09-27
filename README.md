@@ -2,7 +2,7 @@
 Brand new time saver scripts written in python
 
 
-<B>FileNameCorrector</b><br>
+<B>FileNameCorrector.py</b><br>
 you downloaded a playlist from youtube. But later when you try to watch it offline, you see that the videos are all jumbled up 
 due to file names. I faced this problem when I downloaded a playlist using youtube-dl. Even though youtube-dl provides you an 
 option to name the downloaded files according to your choice, once you are done with downloading you got no choice but to manually 
