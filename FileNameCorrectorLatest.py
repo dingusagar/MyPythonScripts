@@ -2,7 +2,7 @@
 """
 Give the directory where the videos files are stored 
 and the url of the playlist
-This script scraps the filename one by one from playlist,
+ This script scraps the filename one by one from playlist,
 finds the closest match file in the given directory,
 renames the file in dir by appending the index number.
 
