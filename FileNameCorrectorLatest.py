@@ -1,5 +1,12 @@
+
 """
-This script is the modified one , due to the change in the attributes of youtube playlist page 
+Give the directory where the videos files are stored 
+and the url of the playlist
+This script scraps the filename one by one from playlist,
+finds the closest match file in the given directory,
+renames the file in dir by appending the index number.
+
+If the file already has a prefix index , it ignores it 
 """
 
 
@@ -8,80 +15,54 @@ from bs4 import BeautifulSoup
 import urllib2
 import os
 import re
+import difflib
 
-# def retriveName(tag,index):
-#     specialChar = ' '
-#     extension = '.mp4'
-#     nameWithVideId = tag['data-title'] + '-' + tag['data-video-id']
+def testIfPrefixIsAlreadyAdded(name):
+    """
+    This is to test whether number prefix is already there as part of a previous run of the same script
+    """
+    try:
+        val = int(name)
+        return True
+    except:
+        return False
 
-#     nameWithVideId = re.sub('[;|:]', '-', nameWithVideId)
-#     if nameWithVideId.startswith('.'):
-#         nameWithVideId = nameWithVideId[1:]
-
-#     # Replace / with _
-#     nameWithVideId = nameWithVideId.replace("/","_")
-
-
-#     orginalName = nameWithVideId + extension
-#     newName = str(index) + specialChar + nameWithVideId + extension
-#     return orginalName,newName
-
-
-
-def ChangeSomeChars(name):
-	newName = re.sub('[;|:]', '_', name)
-	if newName.startswith('.'):
-		newName = newName[1:]
-	newName = newName.replace("/","_")
-	return newName
+def ScrapDataFromPlaylist(url):
     
-
-
-
-def addExtension(name):
-	extension = ".mp4"
-	return name+extension
-
-
-def retriveName2(name,index):
-	existingName = ChangeSomeChars(name)
-	existingName = addExtension(existingName)
-	newName = str(index)+' '+ existingName
-	return existingName,newName
-
+    content = urllib2.urlopen(url).read()
+    soup = BeautifulSoup(content)
+    print soup.title.string
+    tdlinks = soup.find_all('span', attrs={'id': 'video-title'})
+    return tdlinks
 
 def FileNameCorrector(url,dir):
-    content = urllib2.urlopen(url).read()
-
-    soup = BeautifulSoup(content)
-
-    print soup.title.string
-
-    tdlinks = soup.find_all('span', attrs={'id': 'video-title'})
     
-
+    tdlinks = ScrapDataFromPlaylist(url)
+    filenames = os.listdir("/media/dingu/D_Box/newnewTutorials/stat2/")
 
     i = 0
     for l in tdlinks:
-    	link = l.text.strip()
+    	orginalName = l.text.strip()
         i = i + 1
-        orginalName,newName = retriveName2(link,i)
 
-        print "O : " + orginalName
-        print "N : " +newName
+        print "\n\n\n"
+        print i,"  [ Orinal filename from playlist ] : " + orginalName      
 
-        if find(newName,dir):
-            print "Renamed File Already Exists"
-            continue
+        closestMatches =  difflib.get_close_matches(orginalName,filenames,1,0.85)
+        if closestMatches:
+            filetoRename = closestMatches.pop()
+            print "[ Closest Match found ] : ",filetoRename
+            firstWord= filetoRename.split()[0]
 
-
-        if  find(orginalName,dir):
-            os.rename(dir+orginalName,dir+newName)
-            print "Renaming file to ",newName
-            # print "orginal name :",orginalName
-            g=5
+            if not testIfPrefixIsAlreadyAdded(firstWord):                
+                newName = str(i) + " " +filetoRename
+                os.rename(dir+filetoRename,dir+newName)
+                print "[ Renamming to ]  : ",newName
+            else:
+                print "[ Error ]---->> Number prefix already there : ",filetoRename
         else:
-            print "------------------> File not found : ",orginalName,"----> Number : ",i
+            print "[ Error ] ----->>Cannot find a closest match file in the dir"            
+
 
 
 def find(name, path):
@@ -96,7 +77,7 @@ def find(name, path):
 
 
 url = "file:///media/dingu/D_Box/newnewTutorials/Dingu/Statistics%20-%20YouTube%20-%20YouTube.html"
-dir = "/media/dingu/D_Box/newnewTutorials/Dingu/"
+dir = "/media/dingu/D_Box/newnewTutorials/stat2/"
 
 if not dir.endswith('/'):
     dir = dir + '/'
