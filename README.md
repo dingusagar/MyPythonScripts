@@ -15,3 +15,12 @@ same order as in the playlist.
 
 for eg:
 the script replaces a video named "Machine Learning - Linear Regression" to "1 Machine Learning - Linear Regression" so that this video appears first in your directory. 
+
+
+<b>How it works</b>
+Give the directory where the videos files are stored 
+and the url of the playlist
+ This script scraps the filename one by one from playlist,
+finds the closest match file in the given directory,
+renames the file in dir by appending the index number.
+If the file already has a prefix index , it ignores it 
