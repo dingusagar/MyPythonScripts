@@ -25,5 +25,5 @@ finds the closest match file in the given directory,
 renames the file in dir by appending the index number.
 If the file already has a prefix index , it ignores it 
 
-# photOrganizer.py
+#### photOrganizer.py
 Simply organises your photos and videos into folders according to creating date
